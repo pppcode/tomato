@@ -12,25 +12,25 @@ const instance = axios.create({
 });
 
 // Add a request interceptor
-instance.interceptors.request.use(function (config) {
+instance.interceptors.request.use((config) => {
   const xToken = localStorage.getItem('x-token')
   if(xToken) {
-    config.headers['Authorization'] = `Bearer ${xToken}`
+    config.headers.Authorization = `Bearer ${xToken}`
   }
   return config;
-}, function (error) {
+}, (error) => {
   console.error(error)
   return Promise.reject(error);
 });
 
 // Add a response interceptor
-instance.interceptors.response.use(function (response) {
+instance.interceptors.response.use( (response) => {
   // Do something with response data
   if(response.headers['x-token']) {
     localStorage.setItem('x-token',response.headers['x-token'])
   }
   return response;
-}, function (error) {
+}, (error) => {
   // Do something with response error
   return Promise.reject(error);
 });
