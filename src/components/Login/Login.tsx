@@ -25,12 +25,10 @@ class Login extends React.Component<any, ILoginState> {
     this.setState({account: ''});
   }
 
-  onChangeAccount = (e) => {
-    this.setState({account: e.target.value});
-  }
-
-  onChangePassword = (e) => {
-    this.setState({password: e.target.value})
+  onChange = (key: keyof ILoginState, value: string) => {
+    const newState = {}
+    newState[key] = value
+    this.setState(newState)
   }
 
   submit = async()=> {
@@ -40,7 +38,7 @@ class Login extends React.Component<any, ILoginState> {
         account,
         password,
       })
-      console.log('成功')
+      this.props.history.push('/')
     }catch (e) {
       throw new Error(e)
     }
@@ -56,12 +54,12 @@ class Login extends React.Component<any, ILoginState> {
                prefix={<Icon type="user"/>}
                suffix={suffix}
                value={account}
-               onChange={this.onChangeAccount}
+               onChange={(e)=> this.onChange('account',e.target.value)}
                ref={node => this.accountInput = node}
         />
         <Input.Password placeholder="请输入密码"
                         value={password}
-                        onChange={this.onChangePassword}
+                        onChange={(e)=> this.onChange('password',e.target.value)}
         />
         <Button type="primary"  className="LoginButton" onClick={this.submit}>
           登录
