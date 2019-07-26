@@ -24,15 +24,18 @@ class Index extends React.Component<IRouter,IIndexState> {
   }
 
   getMe = async () => {
-    try{
-      const response = await axios.get('me')
-      console.log(response)
-      this.setState({user: response.data})
-    }catch (e) {
-      // if(e.response.status === 401) {
-      //   this.props.history.push('/login')
-      // }
-    }
+    // try{
+    //   const response = await axios.get('me')
+    //   console.log(response)
+    //   this.setState({user: response.data})
+    // }catch (e) {
+    //   if(e.response.status === 401) {
+    //     this.props.history.push('/login')
+    //   }
+    // }
+    const response = await axios.get('me');
+    this.setState({user:response.data})
+
   }
 
   logout = () => {
