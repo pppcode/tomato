@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {Input, Icon, Button} from 'antd';
+import {Link} from "react-router-dom";
 import axios from 'src/config/axios'
+import './SignUp.scss'
 
 interface ISignUpState {
   account: string,
@@ -55,7 +57,8 @@ class SignUp extends React.Component<any, ISignUpState> {
     const {account, password, passwordConformation} = this.state;
     const suffix = account ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
     return (
-      <div className="SingUp">
+      <div className="SingUp" id="SignUp">
+        <h1>番茄闹钟注册</h1>
         <Input placeholder="请输入你的用户名"
                prefix={<Icon type="user"/>}
                suffix={suffix}
@@ -71,9 +74,10 @@ class SignUp extends React.Component<any, ISignUpState> {
                         value={passwordConformation}
                         onChange={this.onChangePasswordConformation}
         />
-        <Button type="primary" onClick={this.submit}>
+        <Button type="primary"  className="loginButton" onClick={this.submit}>
           注册
         </Button>
+        <p>如果你有账号，请立即<Link to="/Login/">登录</Link></p>
       </div>
     );
   }
