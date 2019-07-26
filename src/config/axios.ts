@@ -1,4 +1,5 @@
 import axios from 'axios'
+import history from './history'
 
 const appID = 'yB4EiD1Fn4iD6CSQAdrStd8F'
 const appSecret = 'f4GQD1qPMiC979ABK9ph6LYu'
@@ -33,7 +34,7 @@ instance.interceptors.response.use( (response) => {
 }, (error) => {
   if(error.response.status === 401) {
     console.log('重定向');
-    window.location.href = '/login'
+    history.push('/login')
   }
   return Promise.reject(error);
 });
