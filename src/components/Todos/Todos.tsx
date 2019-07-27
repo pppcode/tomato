@@ -1,5 +1,6 @@
 import * as React from 'react';
 import TodoInput from 'src/components/Todos/TodoInput';
+import TodoItem from 'src/components/Todos/TodoItem'
 import axios from 'src/config/axios';
 import './Todos.scss';
 
@@ -42,15 +43,31 @@ class Todos extends React.Component<any,ITodosState> {
     }
   }
 
+  updateTodo = async (id:number,params:object) => {
+    const {todos} = this.state
+    try{
+      const response = await axios.put(`todos/${id}`,params)
+      const newTodos = todos.map(t=>{
+        if(id === t.id){
+          return response.data.resource
+        }else{
+          return t
+        }
+      })
+      this.setState({todos:newTodos})
+    }catch (e) {
+      throw new Error(e)
+    }
+  }
+
   public render() {
     return (
       <div className="Todos" id="Todos">
         <TodoInput addTodo={(params)=>this.addTodo(params)}/>
         <main>
-          {this.state.todos.map(t=>{
-            return <div key={t.id}>{t.description}</div>
-          }
-          )}
+          {this.state.todos.map(t=><TodoItem key={t.id} {...t}
+            update={this.updateTodo}
+          />)}
         </main>
       </div>
     )
