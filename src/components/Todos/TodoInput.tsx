@@ -25,7 +25,7 @@ class TodoInput extends React.Component<ITodoInputProps,ITodoInputState> {
   onKeyUp = (e)=>{
     if(e.keyCode === 13 && this.state.description !== '') {
       this.postTodo()
-      this.setState({description:''})
+      // this.setState({description:''})
     }
   }
 
@@ -43,13 +43,15 @@ class TodoInput extends React.Component<ITodoInputProps,ITodoInputState> {
     const {description} = this.state;
     const suffix = description ? <Icon type="enter" onClick={this.postTodo}/> : <span/>
     return (
-      <Input
-        placeholder="添加新任务"
-        suffix={suffix}
-        value={description}
-        onChange={(e)=>this.setState({description: e.target.value})}
-        onKeyUp={this.onKeyUp}
-      />
+      <div className="TodoInput" id="TodoInput">
+        <Input
+          placeholder="添加新任务"
+          suffix={suffix}
+          value={description}
+          onChange={(e)=>this.setState({description: e.target.value})}
+          onKeyUp={this.onKeyUp}
+        />
+      </div>
     )
   }
 }
@@ -62,5 +64,5 @@ const mapDispatchToProps = {
   addTodo
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(TodoInput)
+export default connect(mapStateToProps,mapDispatchToProps)(TodoInput);
 
