@@ -1,14 +1,14 @@
 import * as React from 'react';
 import axios from 'src/config/axios'
 import history from 'src/config/history'
+import {connect} from 'react-redux'
+import {initTodos} from "../../redux/actions/todos";
+import {initTomatoes} from "../../redux/actions/tomatoes";
+import Statistics from 'src/components/Statistics/Statistics'
 import {Menu, Dropdown, Icon } from 'antd';
 import Todos from 'src/components/Todos/Todos'
 import Tomatoes from 'src/components/Tomatoes/Tomatoes'
 import './Home.scss'
-
-interface IRouter {
-  history: any
-}
 
 interface IIndexState {
   user: any
@@ -26,10 +26,10 @@ const menu = (
   </Menu>
 )
 
-class Home extends React.Component<IRouter,IIndexState> {
+class Home extends React.Component<any,IIndexState> {
 
-  constructor(props) {
-    super(props);
+  constructor(props:any) {
+    super(props)
     this.state = {
       user: {}
     }
@@ -37,6 +37,27 @@ class Home extends React.Component<IRouter,IIndexState> {
 
   async componentWillMount() {
     await this.getMe()
+    await this.getTodos()
+    await this.getTomatoes()
+  }
+
+  getTodos = async ()=> {
+    try{
+      const response = await axios.get('todos')
+      const todos = response.data.resources.map(t=>Object.assign({},t,{editing: false}))
+      this.props.initTodos(todos)
+    }catch (e) {
+      throw new Error(e)
+    }
+  }
+
+  getTomatoes = async ()=>{
+    try {
+      const response = await axios.get('tomatoes')
+      this.props.initTomatoes(response.data.resources)
+    }catch (e) {
+      throw new Error(e)
+    }
   }
 
   getMe = async () => {
@@ -62,9 +83,18 @@ class Home extends React.Component<IRouter,IIndexState> {
           <Tomatoes/>
           <Todos/>
         </main>
+        <Statistics/>
       </div>
     );
   }
 }
 
-export default Home
+const mapStateToProps = (state, ownProps) => ({
+  ...ownProps
+})
+
+const mapDispatchToProps = {
+  initTodos,
+  initTomatoes
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Home);
