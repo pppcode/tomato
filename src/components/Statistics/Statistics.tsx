@@ -1,5 +1,8 @@
 import * as React from 'react'
 import {connect} from 'react-redux'
+import Polygon from './Polygon'
+import {format} from "date-fns";
+import _ from 'lodash'
 import './Statistics.scss'
 
 interface IStatisticsProps {
@@ -10,6 +13,13 @@ class Statistics extends React.Component<IStatisticsProps> {
 
   get finishedTodos() {
     return this.props.todos.filter(t=> t.completed && !t.deleted)
+  }
+
+  get dailyTodos(){
+    const obj = _.groupBy(this.finishedTodos,(todo)=>{
+      return format(todo.updated_at,'YYYY-MM-D')
+    })
+    return obj
   }
 
   constructor(props) {
@@ -27,6 +37,7 @@ class Statistics extends React.Component<IStatisticsProps> {
           <li>
             历史任务
             累计完成{this.finishedTodos.length}个任务
+            <Polygon data={this.dailyTodos} totalFinishedCount={this.finishedTodos.length}/>
           </li>
         </ul>
       </div>
