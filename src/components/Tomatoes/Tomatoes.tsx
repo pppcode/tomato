@@ -25,7 +25,7 @@ class Tomatoes extends React.Component<ITomatoesProps> {
 
   get unfinishedTomato() {
     // console.log(this.props.tomatoes)
-    return this.props.tomatoes.filter(t => !t.description && !t.ended_at)[0]
+    return this.props.tomatoes.filter(t => !t.description && !t.ended_at && !t.aborted)[0]
   }
 
   getTomatoes = async ()=> {
