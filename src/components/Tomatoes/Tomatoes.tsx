@@ -2,13 +2,14 @@ import * as React from 'react'
 import TomatoAction from "./TomatoAction";
 import {connect} from 'react-redux'
 import './Tomatoes.scss'
-import {addTomato,initTomatoes} from "../../redux/actions/tomatoes";
+import {addTomato,initTomatoes,updateTomato} from "../../redux/actions/tomatoes";
 import axios from '../../config/axios'
 
 interface ITomatoesProps {
   addTomato: (payload:any) => any;
+  updateTomato: (payload:any) => any;
+  initTomatoes: (payload: any) => any;
   tomatoes: any[]
-
 }
 
 
@@ -24,13 +25,13 @@ class Tomatoes extends React.Component<ITomatoesProps> {
 
   get unfinishedTomato() {
     // console.log(this.props.tomatoes)
-    return this.props.tomatoes.filter(t => !t.description && !t.ender_at)[0]
+    return this.props.tomatoes.filter(t => !t.description && !t.ended_at)[0]
   }
 
   getTomatoes = async ()=> {
     try{
       const response = await axios.get('tomatoes')
-      console.log(response.data.resource)
+      this.props.initTomatoes(response.data.resources)
     }catch (e) {
       throw new Error(e)
     }
@@ -50,6 +51,7 @@ class Tomatoes extends React.Component<ITomatoesProps> {
       <div className="Tomatoes" id="Tomatoes">
         <TomatoAction startTomato={this.startTomato}
                       unfinishedTomato={this.unfinishedTomato}
+                      updateTomato={this.props.updateTomato}
 
         />
       </div>
@@ -64,6 +66,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = {
   addTomato,
+  updateTomato,
   initTomatoes
 }
 
